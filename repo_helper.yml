@@ -8,6 +8,7 @@ version: "0.0.0"
 username: "domdfcoding"
 license: 'MIT'
 short_desc: "A Flake8 plugin to identify incorrect use of encodings."
+min_coverage: 100
 
 conda_channels:
  - conda-forge
