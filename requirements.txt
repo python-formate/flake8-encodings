@@ -1,2 +1,3 @@
 domdf-python-tools>=1.8.0
 flake8>=3.7
+flake8-helper>=0.1.1

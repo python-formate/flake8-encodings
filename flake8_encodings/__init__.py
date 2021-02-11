@@ -30,9 +30,10 @@ A Flake8 plugin to identify incorrect use of encodings.
 
 # stdlib
 import ast
-from typing import Dict, Iterator, List, Tuple, Type
+from typing import Dict, List, Optional
 
 # 3rd party
+import flake8_helper
 from domdf_python_tools.utils import posargs2kwargs
 
 __author__: str = "Dominic Davis-Foster"
@@ -50,22 +51,41 @@ ENC004 = "ENC004 'encoding=None' used for 'open' with unknown mode."
 
 
 def kwargs_from_node(node: ast.Call) -> Dict[str, ast.AST]:
-	args: List[ast.AST] = node.args
+	"""
+	Returns a mapping of argument names to the AST nodes representing their values, for the given function call.
+
+	:param node:
+	"""
+
+	args: List[ast.expr] = node.args
 	keywords: List[ast.keyword] = node.keywords
 
 	kwargs = {kw.arg: kw.value for kw in keywords}
 
-	return posargs2kwargs(args, open, kwargs)
+	return posargs2kwargs(args, open, kwargs)  # type: ignore
 
 
-class Visitor(ast.NodeVisitor):
+def mode_is_binary(mode: ast.AST) -> Optional[bool]:
+	"""
+	Returns whether the mode of the call to :func:`open` is binary.
+
+	Returns :py:obj:`None` if the mode cannot be determined.
+
+	:param mode:
+	"""
+
+	if isinstance(mode, ast.Constant):  # pragma: no cover (<py38)
+		return 'b' in mode.value
+	elif isinstance(mode, ast.Str):  # pragma: no cover (py38+)
+		return 'b' in mode.s
+	else:
+		return None
+
+
+class Visitor(flake8_helper.Visitor):
 	"""
 	AST visitor to identify incorrect use of encodings.
 	"""
-
-	def __init__(self) -> None:
-		#: The list of Flake8 errors identified by the visitor.
-		self.errors: List[Tuple[int, int, str]] = []
 
 	def check_encoding(self, node: ast.Call):
 		"""
@@ -79,32 +99,24 @@ class Visitor(ast.NodeVisitor):
 
 		unknown_mode = False
 
+		# TODO: handle locale.getpreferredencoding(False)
+
 		if "mode" in kwargs:
-			print(kwargs["mode"])
-			if isinstance(kwargs["mode"],
-							ast.Constant) and 'b' in kwargs["mode"].value:  # pragma: no cover (<py38)
+			is_binary = mode_is_binary(kwargs["mode"])
+
+			if is_binary:
 				return
-			elif isinstance(kwargs["mode"], ast.Str) and 'b' in kwargs["mode"].s:  # pragma: no cover (py38+)
-				return
-			else:
+			elif is_binary is None:
 				unknown_mode = True
 
 		if "encoding" not in kwargs:
-			self.errors.append((
-					node.lineno,
-					node.col_offset,
-					ENC003 if unknown_mode else ENC001,
-					))
+			self.report_error(node, ENC003 if unknown_mode else ENC001)
 
 		elif isinstance(kwargs["encoding"], (ast.Constant, ast.NameConstant)):
 			if kwargs["encoding"].value is None:
-				self.errors.append((
-						node.lineno,
-						node.col_offset,
-						ENC004 if unknown_mode else ENC002,
-						))
+				self.report_error(node, ENC004 if unknown_mode else ENC002)
 
-	def visit_Call(self, node: ast.Call):
+	def visit_Call(self, node: ast.Call):  # noqa: D102
 		if isinstance(node.func, ast.Name):
 
 			if node.func.id == "open":
@@ -122,7 +134,7 @@ class Visitor(ast.NodeVisitor):
 		self.generic_visit(node)
 
 
-class Plugin:
+class Plugin(flake8_helper.Plugin[Visitor]):
 	"""
 	A Flake8 plugin to identify incorrect use of encodings.
 
@@ -131,19 +143,7 @@ class Plugin:
 
 	name: str = __name__
 	version: str = __version__  #: The plugin version
+	visitor_class = Visitor
 
 	def __init__(self, tree: ast.AST):
 		self._tree = tree
-
-	def run(self) -> Iterator[Tuple[int, int, str, Type["Plugin"]]]:
-		"""
-		Traverse the Abstract Syntax Tree and check calls to :func:`open`.
-
-		Yields a tuple of (line number, column offset, error message, type(self))
-		"""
-
-		visitor = Visitor()
-		visitor.visit(self._tree)
-
-		for line, col, msg in visitor.errors:
-			yield line, col, msg, type(self)

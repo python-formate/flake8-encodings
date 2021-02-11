@@ -40,6 +40,7 @@ known_third_party = [
     "coverage_pyver_pragma",
     "domdf_python_tools",
     "flake8",
+    "flake8_helper",
     "github",
     "pytest",
     "pytest_cov",
