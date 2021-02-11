@@ -144,6 +144,3 @@ class Plugin(flake8_helper.Plugin[Visitor]):
 	name: str = __name__
 	version: str = __version__  #: The plugin version
 	visitor_class = Visitor
-
-	def __init__(self, tree: ast.AST):
-		self._tree = tree
