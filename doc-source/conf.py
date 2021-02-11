@@ -48,7 +48,6 @@ extensions = [
 		"seed_intersphinx_mapping",
 		"sphinx_toolbox.pre_commit",
 		"sphinx_toolbox.flake8",
-		"sphinx_click",
 		]
 
 sphinxemoji_style = "twemoji"
@@ -138,3 +137,5 @@ autodoc_default_options = {
 		"show-inheritance": None,
 		"exclude-members": ','.join(autodoc_exclude_members),
 		}
+
+nitpicky = True

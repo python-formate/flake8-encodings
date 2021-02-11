@@ -32,7 +32,6 @@ classifiers:
 extra_sphinx_extensions:
  - sphinx_toolbox.pre_commit
  - sphinx_toolbox.flake8
- - sphinx_click
 
 entry_points:
   flake8.extension:
@@ -43,3 +42,6 @@ standalone_contrib_guide: true
 
 keywords:
  - flake8
+
+sphinx_conf_epilogue:
+ - nitpicky = True
