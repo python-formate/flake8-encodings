@@ -42,4 +42,4 @@ See `pre-commit <https://github.com/pre-commit/pre-commit>`_ for instructions
 
 Sample ``.pre-commit-config.yaml``:
 
-.. pre-commit:flake8:: 0.0.0
+.. pre-commit:flake8:: 0.1.0
