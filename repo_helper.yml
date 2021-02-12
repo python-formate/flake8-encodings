@@ -46,3 +46,5 @@ keywords:
 
 sphinx_conf_epilogue:
  - nitpicky = True
+
+docs_fail_on_warning: true

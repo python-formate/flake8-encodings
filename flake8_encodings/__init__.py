@@ -5,6 +5,12 @@
 A Flake8 plugin to identify incorrect use of encodings.
 
 .. seealso:: :pep:`597` -- Add optional EncodingWarning
+
+.. TODO::
+
+	Add support for checking e.g. logging.basicConfig(filename="log.txt").
+	It has no encoding parameter before 3.9.
+	Instead an open stream must be used, with the encoding set there.
 """
 #
 #  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -98,8 +104,6 @@ class Visitor(flake8_helper.Visitor):
 		# print(kwargs_from_node(node))
 
 		unknown_mode = False
-
-		# TODO: handle locale.getpreferredencoding(False)
 
 		if "mode" in kwargs:
 			is_binary = mode_is_binary(kwargs["mode"])
