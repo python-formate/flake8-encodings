@@ -151,3 +151,45 @@ To install with ``conda``:
 		$ conda install flake8-encodings
 
 .. end installation
+
+Motivation
+-------------
+
+Developers using macOS or Linux may forget that the default encoding
+is not always UTF-8.
+
+For example, ``long_description = open("README.md").read()`` in
+``setup.py`` is a common mistake. Many Windows users cannot install
+the package if there is at least one non-ASCII character (e.g. emoji)
+in the ``README.md`` file which is encoded in UTF-8.
+
+For example, 489 packages of the 4000 most downloaded packages from
+PyPI used non-ASCII characters in README. And 82 packages of them
+cannot be installed from source package when the locale encoding is
+ASCII. [1]_ They used the default encoding to read README or TOML
+file.
+
+Even Python experts assume that default encoding is UTF-8.
+It creates bugs that happen only on Windows. See [2]_, [3]_, [4]_,
+and [5]_ for example.
+
+`PEP 597 <https://www.python.org/dev/peps/pep-0597>`_ proposed adding a new ``EncodingWarning`` to Python,
+which can be used in conjunction with this tool to identify issues at runtime.
+
+
+.. [1] "Packages can't be installed when encoding is not UTF-8"
+       (https://github.com/methane/pep597-pypi-ascii)
+
+.. [2] Packaging tutorial in packaging.python.org didn't specify
+       encoding to read a ``README.md``
+       (https://github.com/pypa/packaging.python.org/pull/682)
+
+.. [3] ``json.tool`` had used locale encoding to read JSON files.
+       (https://bugs.python.org/issue33684)
+
+.. [4] site: Potential UnicodeDecodeError when handling pth file
+       (https://bugs.python.org/issue33684)
+
+.. [5] pypa/pip: "Installing packages fails if Python 3 installed
+       into path with non-ASCII characters"
+       (https://github.com/pypa/pip/issues/9054)
