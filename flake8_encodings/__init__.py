@@ -45,7 +45,7 @@ from domdf_python_tools.utils import posargs2kwargs
 __author__: str = "Dominic Davis-Foster"
 __copyright__: str = "2020-2021 Dominic Davis-Foster"
 __license__: str = "MIT License"
-__version__: str = "0.1.0"
+__version__: str = "0.1.1"
 __email__: str = "dominic@davis-foster.co.uk"
 
 __all__ = ["Visitor", "Plugin", "kwargs_from_node"]
@@ -97,6 +97,7 @@ class Visitor(flake8_helper.Visitor):
 		"""
 		Check the call represented by the given AST node is using encodings correctly.
 		"""
+
 		kwargs = kwargs_from_node(node)
 
 		# print(node.lineno, node.col_offset)
