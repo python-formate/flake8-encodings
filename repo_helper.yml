@@ -45,6 +45,9 @@ standalone_contrib_guide: true
 
 keywords:
  - flake8
+ - encodings
+ - pep597
+ - unicode
 
 sphinx_conf_epilogue:
  - nitpicky = True

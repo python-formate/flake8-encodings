@@ -7,7 +7,7 @@ name = "flake8-encodings"
 version = "0.1.1"
 description = "A Flake8 plugin to identify incorrect use of encodings."
 readme = "README.rst"
-keywords = [ "flake8",]
+keywords = [ "flake8", "encodings", "pep597", "unicode",]
 dynamic = [ "requires-python", "classifiers", "dependencies",]
 [[project.authors]]
 email = "dominic@davis-foster.co.uk"
