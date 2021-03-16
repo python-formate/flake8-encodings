@@ -1,3 +1,26 @@
 [build-system]
 requires = [ "setuptools>=40.6.0", "wheel>=0.34.2",]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "flake8-encodings"
+version = "0.1.0"
+description = "A Flake8 plugin to identify incorrect use of encodings."
+readme = "README.rst"
+keywords = [ "flake8",]
+dynamic = [ "requires-python", "classifiers", "dependencies",]
+[[project.authors]]
+email = "dominic@davis-foster.co.uk"
+name = "Dominic Davis-Foster"
+
+[project.license]
+file = "LICENSE"
+
+[project.urls]
+Homepage = "https://github.com/domdfcoding/flake8-encodings"
+"Issue Tracker" = "https://github.com/domdfcoding/flake8-encodings/issues"
+"Source Code" = "https://github.com/domdfcoding/flake8-encodings"
+Documentation = "https://flake8-encodings.readthedocs.io/en/latest"
+
+[project.entry-points."flake8.extension"]
+ENC0 = "flake8_encodings:Plugin"
