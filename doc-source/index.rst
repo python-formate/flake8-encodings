@@ -4,7 +4,7 @@ flake8-encodings
 
 .. start short_desc
 
-**A Flake8 plugin to identify incorrect use of encodings.**
+.. documentation-summary::
 
 .. end short_desc
 
