@@ -26,7 +26,7 @@ Flake8 codes
 	ENC011
 	ENC012
 
-.. versionadded:: 0.2.0
+.. versionadded:: 0.2.1
 
 Examples
 ^^^^^^^^^^
@@ -60,4 +60,4 @@ See `pre-commit <https://github.com/pre-commit/pre-commit>`_ for instructions
 
 Sample ``.pre-commit-config.yaml``:
 
-.. pre-commit:flake8:: 0.2.0
+.. pre-commit:flake8:: 0.2.1
