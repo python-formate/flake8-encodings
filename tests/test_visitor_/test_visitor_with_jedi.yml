@@ -13,3 +13,9 @@
 - - 23
   - 11
   - ENC003 no encoding specified for 'open' with unknown mode.
+- - 28
+  - 2
+  - ENC011 no encoding specified for 'configparser.ConfigParser.read'.
+- - 33
+  - 2
+  - ENC012 'encoding=None' used for 'configparser.ConfigParser.read'.
