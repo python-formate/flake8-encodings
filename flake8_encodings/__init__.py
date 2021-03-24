@@ -37,6 +37,7 @@ A Flake8 plugin to identify incorrect use of encodings.
 # stdlib
 import ast
 import configparser
+import tempfile
 from typing import Iterator, Optional, Tuple, Type
 
 # 3rd party
@@ -61,6 +62,8 @@ ENC004 = "ENC004 'encoding=None' used for 'open' with unknown mode."
 
 ENC011 = "ENC011 no encoding specified for 'configparser.ConfigParser.read'."
 ENC012 = "ENC012 'encoding=None' used for 'configparser.ConfigParser.read'."
+
+jedi.settings.fast_parser = False
 
 
 def mode_is_binary(mode: ast.AST) -> Optional[bool]:
@@ -204,8 +207,15 @@ class Plugin(flake8_helper.Plugin[Visitor]):
 
 	def run(self) -> Iterator[Tuple[int, int, str, Type["Plugin"]]]:  # noqa: D102
 
-		visitor = Visitor()
-		visitor.first_visit(self._tree, self.filename)
+		original_cache_dir = jedi.settings.cache_directory
 
-		for line, col, msg in visitor.errors:
-			yield line, col, msg, type(self)
+		with tempfile.TemporaryDirectory() as cache_directory:
+			jedi.settings.cache_directory = cache_directory
+
+			visitor = Visitor()
+			visitor.first_visit(self._tree, self.filename)
+
+			for line, col, msg in visitor.errors:
+				yield line, col, msg, type(self)
+
+		jedi.settings.cache_directory = original_cache_dir
