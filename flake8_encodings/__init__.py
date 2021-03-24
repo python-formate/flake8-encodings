@@ -37,11 +37,11 @@ A Flake8 plugin to identify incorrect use of encodings.
 # stdlib
 import ast
 import configparser
-from typing import  Iterator, Optional, Tuple, Type
+from typing import Iterator, Optional, Tuple, Type
 
 # 3rd party
 import flake8_helper
-import jedi
+import jedi  # type: ignore
 from astatine import kwargs_from_node
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
@@ -91,6 +91,13 @@ class Visitor(flake8_helper.Visitor):
 		self.jedi_script = jedi.Script('')
 
 	def first_visit(self, node: ast.AST, filename: PathPlus):
+		"""
+		Like :meth:`ast.NodeVisitor.visit`, but configures type inference.
+
+		:param node:
+		:param filename: The path to Python source file the AST node was generated from.
+		"""
+
 		self.filename = PathPlus(filename)
 		self.jedi_script = jedi.Script(self.filename.read_text(), path=self.filename)
 		self.visit(node)
@@ -195,7 +202,7 @@ class Plugin(flake8_helper.Plugin[Visitor]):
 		super().__init__(tree)
 		self.filename = PathPlus(filename)
 
-	def run(self: flake8_helper._P, ) -> Iterator[Tuple[int, int, str, Type[flake8_helper._P]]]:
+	def run(self) -> Iterator[Tuple[int, int, str, Type["Plugin"]]]:  # noqa: D102
 
 		visitor = Visitor()
 		visitor.first_visit(self._tree, self.filename)
