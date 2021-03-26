@@ -43,7 +43,7 @@ from typing import Iterator, Optional, Tuple, Type
 # 3rd party
 import flake8_helper
 import jedi  # type: ignore
-from astatine import kwargs_from_node
+from astatine import get_attribute_name, kwargs_from_node
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 
@@ -182,7 +182,10 @@ class Visitor(flake8_helper.Visitor):
 
 				inferred_name: jedi.api.classes.Name
 				for inferred_name in inferred_types:
-					if inferred_name.full_name == "configparser.ConfigParser":
+					if (
+							inferred_name.full_name == "configparser.ConfigParser"
+							and tuple(get_attribute_name(node.func))[-1] == "read"
+							):
 						self.check_configparser_encoding(node)
 
 					# TODO: pathlib.Path etc.

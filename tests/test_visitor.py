@@ -42,7 +42,7 @@ class G:
 		from configparser import ConfigParser
 		cfg = ConfigParser()
 		cfg.read("tox.ini", encoding=None)
-
+		cfg.read_dict({})
 """
 
 
