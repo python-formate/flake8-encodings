@@ -26,7 +26,20 @@ Flake8 codes
 	ENC011
 	ENC012
 
-.. versionadded:: 0.2.2
+.. versionadded:: 0.2.0
+
+**ENC02X**: checks for :meth:`pathlib.Path.open`, :meth:`read_text() <pathlib.Path.read_text>` and :meth:`write_text() <pathlib.Path.write_text>`.
+
+.. flake8-codes:: flake8_encodings
+
+	ENC021
+	ENC022
+	ENC023
+	ENC024
+	ENC025
+	ENC026
+
+.. versionadded:: 0.3.0
 
 Examples
 ^^^^^^^^^^
@@ -50,6 +63,16 @@ Examples
 		cfg = configparser.ConfigParser()
 		cfg.read(filename)  # ENC011
 		# cfg.read(filename, encoding=None)  # ENC012
+
+	def manipulate_file(filename):
+		path = pathlib.Path(filename)
+
+		path.write_text("Hello world")  # ENC025
+
+		with path.open("a") as fp:  # ENC021
+			f.write("\nHello everyone")
+
+		print(path.read_text(encoding=None))  # ENC024
 
 
 Pre-commit hook

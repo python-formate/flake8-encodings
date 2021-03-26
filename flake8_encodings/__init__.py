@@ -38,7 +38,7 @@ A Flake8 plugin to identify incorrect use of encodings.
 import ast
 import configparser
 import tempfile
-from typing import Iterator, Optional, Tuple, Type
+from typing import Iterator, List, Optional, Tuple, Type
 
 # 3rd party
 import flake8_helper
@@ -62,6 +62,13 @@ ENC004 = "ENC004 'encoding=None' used for 'open' with unknown mode."
 
 ENC011 = "ENC011 no encoding specified for 'configparser.ConfigParser.read'."
 ENC012 = "ENC012 'encoding=None' used for 'configparser.ConfigParser.read'."
+
+ENC021 = "ENC021 no encoding specified for 'pathlib.Path.open'."
+ENC022 = "ENC022 'encoding=None' used for 'pathlib.Path.open'."
+ENC023 = "ENC023 no encoding specified for 'pathlib.Path.read_text'."
+ENC024 = "ENC024 'encoding=None' used for 'pathlib.Path.read_text'."
+ENC025 = "ENC025 no encoding specified for 'pathlib.Path.write_text'."
+ENC026 = "ENC026 'encoding=None' used for 'pathlib.Path.write_text'."
 
 jedi.settings.fast_parser = False
 
@@ -97,6 +104,8 @@ class Visitor(flake8_helper.Visitor):
 		"""
 		Like :meth:`ast.NodeVisitor.visit`, but configures type inference.
 
+		.. versionadded:: 0.2.0
+
 		:param node:
 		:param filename: The path to Python source file the AST node was generated from.
 		"""
@@ -110,6 +119,10 @@ class Visitor(flake8_helper.Visitor):
 		Check the call represented by the given AST node is using encodings correctly.
 
 		This function checks :func:`open`, :func:`builtins.open <open>` and :func:`io.open`.
+
+		.. versionchanged:: 0.2.0
+
+			Renamed from ``check_encoding``
 		"""
 
 		kwargs = kwargs_from_node(node, open)
@@ -142,6 +155,8 @@ class Visitor(flake8_helper.Visitor):
 		Check the call represented by the given AST node is using encodings correctly.
 
 		This function checks :meth:`configparser.ConfigParser.read`.
+
+		.. versionadded:: 0.2.0
 		"""
 
 		kwargs = kwargs_from_node(node, configparser.ConfigParser.read)
@@ -152,6 +167,38 @@ class Visitor(flake8_helper.Visitor):
 		elif isinstance(kwargs["encoding"], (ast.Constant, ast.NameConstant)):
 			if kwargs["encoding"].value is None:
 				self.report_error(node, ENC012)
+
+	def check_pathlib_encoding(self, node: ast.Call, method_name: str):
+		"""
+		Check the call represented by the given AST node is using encodings correctly.
+
+		This function checks :meth:`pathlib.Path.open`, :meth:`pathlib.Path.read_text`,
+		and :meth:`pathlib.Path.write_text`.
+
+		.. versionadded:: 0.3.0
+		"""
+
+		if method_name == "open":
+			no_encoding = ENC021
+			encoding_none = ENC022
+		elif method_name == "read_text":
+			no_encoding = ENC023
+			encoding_none = ENC024
+		elif method_name == "write_text":
+			no_encoding = ENC025
+			encoding_none = ENC026
+		else:  # pragma: no cover
+			# Not a method we understand
+			return
+
+		kwargs = kwargs_from_node(node, configparser.ConfigParser.read)
+
+		if "encoding" not in kwargs:
+			self.report_error(node, no_encoding)
+
+		elif isinstance(kwargs["encoding"], (ast.Constant, ast.NameConstant)):
+			if kwargs["encoding"].value is None:
+				self.report_error(node, encoding_none)
 
 	def visit_Call(self, node: ast.Call):  # noqa: D102
 
@@ -178,17 +225,15 @@ class Visitor(flake8_helper.Visitor):
 				return self.generic_visit(node)
 
 			else:
-				inferred_types = self.jedi_script.infer(node.lineno, node.func.col_offset)
+				inferred_types = get_inferred_types(self.jedi_script, node)
+				method_name = tuple(get_attribute_name(node.func))[-1]
 
-				inferred_name: jedi.api.classes.Name
-				for inferred_name in inferred_types:
-					if (
-							inferred_name.full_name == "configparser.ConfigParser"
-							and tuple(get_attribute_name(node.func))[-1] == "read"
-							):
+				for class_name in inferred_types:
+					if is_configparser_read(class_name, method_name):
 						self.check_configparser_encoding(node)
 
-					# TODO: pathlib.Path etc.
+					elif is_pathlib_method(class_name, method_name):
+						self.check_pathlib_encoding(node, method_name)
 
 		self.generic_visit(node)
 
@@ -222,3 +267,63 @@ class Plugin(flake8_helper.Plugin[Visitor]):
 				yield line, col, msg, type(self)
 
 		jedi.settings.cache_directory = original_cache_dir
+
+
+def is_configparser_read(class_name: str, method_name: str) -> bool:
+	"""
+	Returns :py:obj:`True` if method is :meth:`configparser.ConfigParser.read` or
+	:meth:`configparser.RawConfigParser.read`.
+
+	.. versionadded:: 0.3.0
+
+	:param class_name: The inferred name of the class the method belongs to.
+	:param method_name: The name of the record.
+	"""  # noqa: D400
+
+	if class_name not in {"configparser.ConfigParser", "configparser.RawConfigParser"}:
+		return False
+
+	if method_name != "read":
+		return False
+
+	return True
+
+
+def is_pathlib_method(class_name: str, method_name: str) -> bool:
+	"""
+	Returns :py:obj:`True` if method is :meth:`pathlib.Path.open`,
+	:meth:`read_text() <pathlib.Path.read_text>` or :meth:`write_text() <pathlib.Path.write_text>`.
+
+	.. versionadded:: 0.3.0
+
+	:param class_name: The inferred name of the class the method belongs to.
+	:param method_name: The name of the record.
+	"""  # noqa: D400
+
+	if class_name not in {"pathlib.Path", "pathlib.WindowsPath", "pathlib.PosixPath"}:
+		return False
+
+	if method_name not in {"open", "read_text", "write_text"}:
+		return False
+
+	return True
+
+
+def get_inferred_types(jedi_script: jedi.Script, node: ast.Call) -> List[str]:
+	"""
+
+	:param jedi_script:
+	:param node:
+	"""
+
+	attr_names = tuple(get_attribute_name(node.func))
+	inferred_types = set()
+
+	inferred_name: jedi.api.classes.Name
+	for inferred_name in jedi_script.infer(node.lineno, node.func.col_offset):
+		inferred_types.add(inferred_name.full_name)
+
+	for inferred_name in jedi_script.infer(node.lineno, node.func.col_offset + len('.'.join(attr_names[:-1]))):
+		inferred_types.add(inferred_name.full_name)
+
+	return sorted(inferred_types)
