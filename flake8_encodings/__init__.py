@@ -220,6 +220,11 @@ class Visitor(flake8_helper.Visitor):
 				# Attribute on a string
 				return self.generic_visit(node)
 
+			elif isinstance(node.func.value, ast.BinOp):  # pragma: no cover
+				# TODO
+				# Expressions such as (tmp_pathplus / "code.py").write_text(example_source)
+				return self.generic_visit(node)
+
 			elif self.filename.as_posix() == "<unknown>":
 				# no jedi source (run with .visit() or from memory)
 				return self.generic_visit(node)
