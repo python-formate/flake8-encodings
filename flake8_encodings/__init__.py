@@ -316,6 +316,7 @@ def is_pathlib_method(class_name: str, method_name: str) -> bool:
 
 def get_inferred_types(jedi_script: jedi.Script, node: ast.Call) -> List[str]:
 	"""
+	Returns a list of types inferred by ``jedi`` for the given call node.
 
 	:param jedi_script:
 	:param node:
