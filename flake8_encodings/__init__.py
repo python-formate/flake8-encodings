@@ -225,6 +225,11 @@ class Visitor(flake8_helper.Visitor):
 				# Expressions such as (tmp_pathplus / "code.py").write_text(example_source)
 				return self.generic_visit(node)
 
+			elif isinstance(node.func.value, ast.Subscript):  # pragma: no cover
+				# TODO
+				# Expressions such as my_list[0].run()
+				return self.generic_visit(node)
+
 			elif self.filename.as_posix() == "<unknown>":
 				# no jedi source (run with .visit() or from memory)
 				return self.generic_visit(node)
