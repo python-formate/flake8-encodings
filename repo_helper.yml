@@ -4,7 +4,7 @@ modname: flake8-encodings
 copyright_years: "2020-2021"
 author: "Dominic Davis-Foster"
 email: "dominic@davis-foster.co.uk"
-version: "0.3.0"
+version: "0.3.1"
 username: "domdfcoding"
 license: 'MIT'
 short_desc: "A Flake8 plugin to identify incorrect use of encodings."
