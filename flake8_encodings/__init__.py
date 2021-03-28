@@ -235,8 +235,12 @@ class Visitor(flake8_helper.Visitor):
 				return self.generic_visit(node)
 
 			else:
-				inferred_types = get_inferred_types(self.jedi_script, node)
-				method_name = tuple(get_attribute_name(node.func))[-1]
+
+				try:
+					inferred_types = get_inferred_types(self.jedi_script, node)
+					method_name = tuple(get_attribute_name(node.func))[-1]
+				except NotImplementedError:  # pragma: no cover
+					return self.generic_visit(node)
 
 				for class_name in inferred_types:
 					if is_configparser_read(class_name, method_name):
