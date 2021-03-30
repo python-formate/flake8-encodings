@@ -203,7 +203,6 @@ class Visitor(flake8_helper.Visitor):
 			return
 
 		kwargs = kwargs_from_node(node, function)
-		print(kwargs)
 
 		unknown_mode = False
 
