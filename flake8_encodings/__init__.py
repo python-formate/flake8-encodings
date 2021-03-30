@@ -39,7 +39,7 @@ import ast
 import configparser
 import pathlib
 import tempfile
-from typing import Iterator, List, Optional, Tuple, Type
+from typing import Callable, Iterator, List, Optional, Tuple, Type
 
 # 3rd party
 import flake8_helper
@@ -183,6 +183,8 @@ class Visitor(flake8_helper.Visitor):
 
 		.. versionadded:: 0.3.0
 		"""
+
+		function: Callable
 
 		if method_name == "open":
 			no_encoding = ENC021
