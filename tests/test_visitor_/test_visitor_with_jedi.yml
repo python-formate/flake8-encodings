@@ -31,30 +31,33 @@
 - - 43
   - 1
   - ENC022 'encoding=None' used for 'pathlib.Path.open'.
-- - 48
+- - 47
+  - 6
+  - ENC021 no encoding specified for 'pathlib.Path.open'.
+- - 51
   - 1
   - ENC023 no encoding specified for 'pathlib.Path.read_text'.
-- - 49
+- - 52
   - 1
   - ENC024 'encoding=None' used for 'pathlib.Path.read_text'.
-- - 53
+- - 56
   - 7
   - ENC023 no encoding specified for 'pathlib.Path.read_text'.
-- - 54
+- - 57
   - 1
   - ENC024 'encoding=None' used for 'pathlib.Path.read_text'.
-- - 59
+- - 62
   - 1
   - ENC025 no encoding specified for 'pathlib.Path.write_text'.
-- - 60
+- - 63
   - 1
   - ENC026 'encoding=None' used for 'pathlib.Path.write_text'.
-- - 64
+- - 67
   - 1
   - ENC025 no encoding specified for 'pathlib.Path.write_text'.
-- - 65
+- - 68
   - 1
   - ENC026 'encoding=None' used for 'pathlib.Path.write_text'.
-- - 73
+- - 76
   - 2
   - ENC023 no encoding specified for 'pathlib.Path.read_text'.

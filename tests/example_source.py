@@ -44,6 +44,9 @@ def paths_open():
 	pathlib.WindowsPath("README.md").open(encoding="UTF-8")
 	pathlib.PosixPath("README.md").as_posix()
 
+	with pathlib.Path("foo.txt").open("w") as fp:
+		fp.write("Hello World")
+
 def paths_read_text():
 	pathlib.Path("foo.txt").read_text()
 	pathlib.Path("LICENSE").read_text(encoding=None)
@@ -74,4 +77,7 @@ def paths_assigned():
 	else:
 		pyproject_file.write_text("foo", encoding="UTF-8")
 
+def paths_open_binary():
+	with pathlib.Path("foo.txt").open("wb", encoding="UTF-8") as fp:
+		fp.write(b"Hello World")
 """

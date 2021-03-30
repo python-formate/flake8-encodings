@@ -37,6 +37,7 @@ A Flake8 plugin to identify incorrect use of encodings.
 # stdlib
 import ast
 import configparser
+import pathlib
 import tempfile
 from typing import Iterator, List, Optional, Tuple, Type
 
@@ -71,6 +72,11 @@ ENC025 = "ENC025 no encoding specified for 'pathlib.Path.write_text'."
 ENC026 = "ENC026 'encoding=None' used for 'pathlib.Path.write_text'."
 
 jedi.settings.fast_parser = False
+
+_configparser_read = configparser.ConfigParser().read
+_pathlib_open = pathlib.Path().open
+_pathlib_read_text = pathlib.Path().read_text
+_pathlib_write_text = pathlib.Path().write_text
 
 
 def mode_is_binary(mode: ast.AST) -> Optional[bool]:
@@ -159,7 +165,7 @@ class Visitor(flake8_helper.Visitor):
 		.. versionadded:: 0.2.0
 		"""
 
-		kwargs = kwargs_from_node(node, configparser.ConfigParser.read)
+		kwargs = kwargs_from_node(node, _configparser_read)
 
 		if "encoding" not in kwargs:
 			self.report_error(node, ENC011)
@@ -181,17 +187,33 @@ class Visitor(flake8_helper.Visitor):
 		if method_name == "open":
 			no_encoding = ENC021
 			encoding_none = ENC022
+			function = _pathlib_open
 		elif method_name == "read_text":
 			no_encoding = ENC023
 			encoding_none = ENC024
+			function = _pathlib_read_text
 		elif method_name == "write_text":
 			no_encoding = ENC025
 			encoding_none = ENC026
+			function = _pathlib_write_text
 		else:  # pragma: no cover
 			# Not a method we understand
 			return
 
-		kwargs = kwargs_from_node(node, configparser.ConfigParser.read)
+		kwargs = kwargs_from_node(node, function)
+		print(kwargs)
+
+		unknown_mode = False
+
+		if "mode" in kwargs:
+			is_binary = mode_is_binary(kwargs["mode"])
+
+			if is_binary:
+				return
+			elif is_binary is None:  # pragma: no cover
+				# TODO: unknown mode
+				unknown_mode = True
+				return
 
 		if "encoding" not in kwargs:
 			self.report_error(node, no_encoding)

@@ -1,5 +1,5 @@
 astatine>=0.3.1
-domdf-python-tools>=1.8.0
+domdf-python-tools>=2.8.1
 flake8>=3.7
 flake8-helper>=0.1.1
 jedi>=0.18.0
