@@ -43,6 +43,7 @@ known_third_party = [
     "flake8",
     "flake8_helper",
     "github",
+    "importlib_metadata",
     "jedi",
     "pytest",
     "pytest_cov",

@@ -7,12 +7,12 @@ name = "flake8-encodings"
 version = "0.3.4"
 description = "A Flake8 plugin to identify incorrect use of encodings."
 readme = "README.rst"
-keywords = [ "flake8", "encodings", "pep597", "unicode",]
+keywords = [ "encodings", "flake8", "pep597", "unicode",]
 dynamic = [ "requires-python", "classifiers", "dependencies",]
 
 [[project.authors]]
-email = "dominic@davis-foster.co.uk"
 name = "Dominic Davis-Foster"
+email = "dominic@davis-foster.co.uk"
 
 
 [project.license]
@@ -37,6 +37,89 @@ python-implementations = [ "CPython", "PyPy",]
 platforms = [ "Windows", "macOS", "Linux",]
 license-key = "MIT"
 package = "flake8_encodings"
+
+[tool.mkrecipe]
+conda-channels = [ "conda-forge", "domdfcoding",]
+extras = "all"
+
+[tool.sphinx-pyproject]
+github_username = "domdfcoding"
+github_repository = "flake8-encodings"
+author = "Dominic Davis-Foster"
+project = "flake8-encodings"
+copyright = "2020-2021 Dominic Davis-Foster"
+language = "en"
+package_root = "flake8_encodings"
+extensions = [
+    "sphinx_toolbox",
+    "sphinx_toolbox.more_autodoc",
+    "sphinx_toolbox.more_autosummary",
+    "sphinx_toolbox.documentation_summary",
+    "sphinx_toolbox.tweaks.param_dash",
+    "sphinx_toolbox.tweaks.latex_layout",
+    "sphinx_toolbox.tweaks.latex_toc",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.mathjax",
+    "sphinxcontrib.httpdomain",
+    "sphinxcontrib.extras_require",
+    "sphinx.ext.todo",
+    "sphinxemoji.sphinxemoji",
+    "notfound.extension",
+    "sphinx_copybutton",
+    "sphinxcontrib.default_values",
+    "sphinxcontrib.toctree_plus",
+    "sphinx_debuginfo",
+    "seed_intersphinx_mapping",
+    "sphinx_toolbox.pre_commit",
+    "sphinx_toolbox.flake8",
+]
+sphinxemoji_style = "twemoji"
+gitstamp_fmt = "%d %b %Y"
+templates_path = [ "_templates",]
+html_static_path = [ "_static",]
+source_suffix = ".rst"
+master_doc = "index"
+suppress_warnings = [ "image.nonlocal_uri",]
+pygments_style = "default"
+html_theme = "furo"
+html_theme_path = [ "../..",]
+html_show_sourcelink = true
+toctree_plus_types = [
+    "class",
+    "confval",
+    "data",
+    "directive",
+    "enum",
+    "exception",
+    "flag",
+    "function",
+    "namedtuple",
+    "protocol",
+    "role",
+    "typeddict",
+]
+add_module_names = false
+hide_none_rtype = true
+all_typevars = true
+overloads_location = "bottom"
+autodoc_exclude_members = [
+    "__dict__",
+    "__class__",
+    "__dir__",
+    "__weakref__",
+    "__module__",
+    "__annotations__",
+    "__orig_bases__",
+    "__parameters__",
+    "__subclasshook__",
+    "__init_subclass__",
+    "__attrs_attrs__",
+    "__init__",
+    "__new__",
+    "__getnewargs__",
+    "__abstractmethods__",
+    "__hash__",
+]
 
 [project.entry-points."flake8.extension"]
 ENC0 = "flake8_encodings:Plugin"
