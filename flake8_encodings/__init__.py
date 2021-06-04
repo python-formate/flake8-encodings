@@ -364,4 +364,4 @@ def get_inferred_types(jedi_script: jedi.Script, node: ast.Call) -> List[str]:
 	for inferred_name in jedi_script.infer(node.lineno, node.func.col_offset + len('.'.join(attr_names[:-1]))):
 		inferred_types.add(inferred_name.full_name)
 
-	return sorted(inferred_types)
+	return sorted(filter(None, inferred_types))
