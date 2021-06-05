@@ -2,6 +2,7 @@
 import ast
 
 # 3rd party
+import pytest
 from coincidence.regressions import AdvancedDataRegressionFixture
 from domdf_python_tools.paths import PathPlus
 
@@ -9,8 +10,24 @@ from domdf_python_tools.paths import PathPlus
 from flake8_encodings import Plugin
 from tests.example_source import example_source
 
+try:
+	# 3rd party
+	import jedi  # type: ignore
+	has_jedi = True
+except ImportError:
+	has_jedi = False
 
-def test_plugin(tmp_pathplus: PathPlus, advanced_data_regression: AdvancedDataRegressionFixture):
+skip_reason = "Output differs depending on jedi availability"
+
+
+@pytest.mark.parametrize(
+		"has_jedi",
+		[
+				pytest.param(True, id="has_jedi", marks=pytest.mark.skipif(not has_jedi, reason=skip_reason)),
+				pytest.param(False, id="no_jedi", marks=pytest.mark.skipif(has_jedi, reason=skip_reason)),
+				]
+		)
+def test_plugin(tmp_pathplus: PathPlus, advanced_data_regression: AdvancedDataRegressionFixture, has_jedi):
 	(tmp_pathplus / "code.py").write_text(example_source)
 
 	plugin = Plugin(ast.parse(example_source), filename=str(tmp_pathplus / "code.py"))

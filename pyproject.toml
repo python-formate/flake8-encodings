@@ -24,6 +24,10 @@ Homepage = "https://github.com/domdfcoding/flake8-encodings"
 "Source Code" = "https://github.com/domdfcoding/flake8-encodings"
 Documentation = "https://flake8-encodings.readthedocs.io/en/latest"
 
+[project.optional-dependencies]
+classes = [ "jedi>=0.18.0",]
+all = [ "jedi>=0.18.0",]
+
 [tool.whey]
 base-classifiers = [
     "Development Status :: 4 - Beta",

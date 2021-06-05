@@ -1,0 +1,5 @@
+- '6:9: ENC001 no encoding specified for ''open''.'
+- '11:10: ENC001 no encoding specified for ''open''.'
+- '12:10: ENC001 no encoding specified for ''open''.'
+- '13:10: ENC002 ''encoding=None'' used for ''open''.'
+- '23:11: ENC003 no encoding specified for ''open'' with unknown mode.'

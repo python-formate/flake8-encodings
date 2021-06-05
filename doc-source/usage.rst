@@ -27,6 +27,7 @@ Flake8 codes
 	ENC012
 
 .. versionadded:: 0.2.0
+.. versionchanged:: 0.4.0  These codes now require the classes extra to be installed [1]_.
 
 **ENC02X**: checks for :meth:`pathlib.Path.open`, :meth:`read_text() <pathlib.Path.read_text>` and :meth:`write_text() <pathlib.Path.write_text>`.
 
@@ -40,6 +41,10 @@ Flake8 codes
 	ENC026
 
 .. versionadded:: 0.3.0
+.. versionchanged:: 0.4.0  These codes now require the classes extra to be installed [1]_.
+
+.. [1] Install using ``python3 -m pip install flake8-encodings[classes]``
+
 
 Examples
 ^^^^^^^^^^

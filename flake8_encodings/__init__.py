@@ -39,14 +39,18 @@ import ast
 import configparser
 import pathlib
 import tempfile
-from typing import Callable, Iterator, List, Optional, Tuple, Type
+from typing import TYPE_CHECKING, Callable, Iterator, List, Optional, Tuple, Type
 
 # 3rd party
 import flake8_helper
-import jedi  # type: ignore
 from astatine import get_attribute_name, kwargs_from_node
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
+
+if TYPE_CHECKING:
+	# 3rd party
+	from jedi import Script  # type: ignore
+	from jedi.api.classes import Name  # type: ignore
 
 __author__: str = "Dominic Davis-Foster"
 __copyright__: str = "2020-2021 Dominic Davis-Foster"
@@ -54,7 +58,7 @@ __license__: str = "MIT License"
 __version__: str = "0.3.5"
 __email__: str = "dominic@davis-foster.co.uk"
 
-__all__ = ["Visitor", "Plugin"]
+__all__ = ["Visitor", "ClassVisitor", "Plugin"]
 
 ENC001 = "ENC001 no encoding specified for 'open'."
 ENC002 = "ENC002 'encoding=None' used for 'open'."
@@ -70,8 +74,6 @@ ENC023 = "ENC023 no encoding specified for 'pathlib.Path.read_text'."
 ENC024 = "ENC024 'encoding=None' used for 'pathlib.Path.read_text'."
 ENC025 = "ENC025 no encoding specified for 'pathlib.Path.write_text'."
 ENC026 = "ENC026 'encoding=None' used for 'pathlib.Path.write_text'."
-
-jedi.settings.fast_parser = False
 
 _configparser_read = configparser.ConfigParser().read
 _pathlib_open = pathlib.Path().open
@@ -99,26 +101,11 @@ def mode_is_binary(mode: ast.AST) -> Optional[bool]:
 class Visitor(flake8_helper.Visitor):
 	"""
 	AST visitor to identify incorrect use of encodings.
+
+	.. versionchanged:: 0.4.0
+
+		The functionality for checking classes has moved to the :class:`~.ClassVisitor` subclass.
 	"""
-
-	def __init__(self):
-		super().__init__()
-		self.filename = PathPlus("<unknown>")
-		self.jedi_script = jedi.Script('')
-
-	def first_visit(self, node: ast.AST, filename: PathPlus):
-		"""
-		Like :meth:`ast.NodeVisitor.visit`, but configures type inference.
-
-		.. versionadded:: 0.2.0
-
-		:param node:
-		:param filename: The path to Python source file the AST node was generated from.
-		"""
-
-		self.filename = PathPlus(filename)
-		self.jedi_script = jedi.Script(self.filename.read_text(), path=self.filename)
-		self.visit(node)
 
 	def check_open_encoding(self, node: ast.Call):
 		"""
@@ -126,9 +113,7 @@ class Visitor(flake8_helper.Visitor):
 
 		This function checks :func:`open`, :func:`builtins.open <open>` and :func:`io.open`.
 
-		.. versionchanged:: 0.2.0
-
-			Renamed from ``check_encoding``
+		.. versionchanged:: 0.2.0  Renamed from ``check_encoding``
 		"""
 
 		kwargs = kwargs_from_node(node, open)
@@ -155,6 +140,77 @@ class Visitor(flake8_helper.Visitor):
 				self.report_error(node, ENC004 if unknown_mode else ENC002)
 
 	check_encoding = check_open_encoding  # deprecated
+
+	def visit_Call(self, node: ast.Call):  # noqa: D102
+
+		if isinstance(node.func, ast.Name):
+
+			if node.func.id == "open":
+				# print(node.func.id)
+				self.check_encoding(node)
+				return
+
+		elif isinstance(node.func, ast.Attribute):
+			if isinstance(node.func.value, ast.Name):
+
+				if node.func.value.id in {"builtins", "io"} and node.func.attr == "open":
+					self.check_open_encoding(node)
+					return
+
+			if isinstance(node.func.value, ast.Str):  # pragma: no cover
+				# Attribute on a string
+				return self.generic_visit(node)
+
+			elif isinstance(node.func.value, ast.BinOp):  # pragma: no cover
+				# TODO
+				# Expressions such as (tmp_pathplus / "code.py").write_text(example_source)
+				return self.generic_visit(node)
+
+			elif isinstance(node.func.value, ast.Subscript):  # pragma: no cover
+				# TODO
+				# Expressions such as my_list[0].run()
+				return self.generic_visit(node)
+
+		self.generic_visit(node)
+
+
+class ClassVisitor(Visitor):
+	"""
+	AST visitor to identify incorrect use of encodings,
+	with support for :class:`pathlib.Path` and :class:`configparser.ConfigParser`.
+
+	.. versionadded:: 0.4.0
+	"""  # noqa: D400
+
+	def __init__(self):
+		try:
+			# 3rd party
+			import jedi
+		except ImportError as e:
+			exc = e.__class__("This class requires 'jedi' to be installed but it could not be imported.")
+			exc.__traceback__ = e.__traceback__
+			raise exc from None
+
+		super().__init__()
+		self.filename = PathPlus("<unknown>")
+		self.jedi_script = jedi.Script('')
+
+	def first_visit(self, node: ast.AST, filename: PathPlus):
+		"""
+		Like :meth:`ast.NodeVisitor.visit`, but configures type inference.
+
+		.. versionadded:: 0.2.0
+
+		:param node:
+		:param filename: The path to Python source file the AST node was generated from.
+		"""
+
+		# 3rd party
+		import jedi  # nodep
+
+		self.filename = PathPlus(filename)
+		self.jedi_script = jedi.Script(self.filename.read_text(), path=self.filename)
+		self.visit(node)
 
 	def check_configparser_encoding(self, node: ast.Call):
 		"""
@@ -292,18 +348,30 @@ class Plugin(flake8_helper.Plugin[Visitor]):
 
 	def run(self) -> Iterator[Tuple[int, int, str, Type["Plugin"]]]:  # noqa: D102
 
-		original_cache_dir = jedi.settings.cache_directory
+		try:
+			# 3rd party
+			import jedi
+			jedi.settings.fast_parser = False
 
-		with tempfile.TemporaryDirectory() as cache_directory:
-			jedi.settings.cache_directory = cache_directory
+			original_cache_dir = jedi.settings.cache_directory
 
+			with tempfile.TemporaryDirectory() as cache_directory:
+				jedi.settings.cache_directory = cache_directory
+
+				class_visitor = ClassVisitor()
+				class_visitor.first_visit(self._tree, self.filename)
+
+				for line, col, msg in class_visitor.errors:
+					yield line, col, msg, type(self)
+
+			jedi.settings.cache_directory = original_cache_dir
+
+		except ImportError:
 			visitor = Visitor()
-			visitor.first_visit(self._tree, self.filename)
+			visitor.visit(self._tree)
 
 			for line, col, msg in visitor.errors:
 				yield line, col, msg, type(self)
-
-		jedi.settings.cache_directory = original_cache_dir
 
 
 def is_configparser_read(class_name: str, method_name: str) -> bool:
@@ -346,7 +414,7 @@ def is_pathlib_method(class_name: str, method_name: str) -> bool:
 	return True
 
 
-def get_inferred_types(jedi_script: jedi.Script, node: ast.Call) -> List[str]:
+def get_inferred_types(jedi_script: "Script", node: ast.Call) -> List[str]:
 	"""
 	Returns a list of types inferred by ``jedi`` for the given call node.
 
@@ -357,7 +425,7 @@ def get_inferred_types(jedi_script: jedi.Script, node: ast.Call) -> List[str]:
 	attr_names = tuple(get_attribute_name(node.func))
 	inferred_types = set()
 
-	inferred_name: jedi.api.classes.Name
+	inferred_name: "Name"
 	for inferred_name in jedi_script.infer(node.lineno, node.func.col_offset):
 		inferred_types.add(inferred_name.full_name)
 

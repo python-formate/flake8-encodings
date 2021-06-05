@@ -17,4 +17,4 @@ __all__ = [
 		]
 
 __version__ = "0.3.5"
-extras_require = {}
+extras_require = {"classes": ["jedi>=0.18.0"], "all": ["jedi>=0.18.0"]}
