@@ -108,7 +108,7 @@ flake8-encodings
 		:alt: GitHub top language
 
 	.. |commits-since| github-shield::
-		:commits-since: v0.3.4
+		:commits-since: v0.3.5
 		:alt: GitHub commits since tagged version
 
 	.. |commits-latest| github-shield::
