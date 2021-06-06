@@ -148,6 +148,20 @@ To install with ``conda``:
 
 .. end installation
 
+
+In version 0.4.0 and above the functionality for checking classes
+(:class:`~configparser.ConfigParser` and :class:`~.pathlib.Path` for now)
+requires the ``classes`` extra to be installed:
+
+.. code-block:: bash
+
+	$ python3 -m pip install flake8-encodings[classes]
+
+The checks for classes are slower and CPU intensive,
+so only enable them if you use the classes in question.
+
+
+
 Motivation
 -------------
 
