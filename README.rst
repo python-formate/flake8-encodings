@@ -150,7 +150,7 @@ To install with ``conda``:
 
 
 In version 0.4.0 and above the functionality for checking classes
-(:class:`~configparser.ConfigParser` and :class:`~.pathlib.Path` for now)
+(``configparser.ConfigParser`` and ``pathlib.Path`` for now)
 requires the ``classes`` extra to be installed:
 
 .. code-block:: bash
