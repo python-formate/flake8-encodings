@@ -8,7 +8,7 @@ This library provides the Flake8 plugin ``flake8-encodings``  to identify incorr
 Flake8 codes
 --------------
 
-**ENC00X**: checks for :func:`open`, :func:`builtins.open <open>` and :func:`io.open`.
+:bold-title:`ENC00X`: checks for :func:`open`, :func:`builtins.open <open>` and :func:`io.open`.
 
 .. flake8-codes:: flake8_encodings
 
@@ -19,7 +19,8 @@ Flake8 codes
 
 ``ENC003`` and ``ENC004`` are used in cases where the encoding is omitted (or is explicitly :py:obj:`None`) but the mode cannot be determined. The file might be opened in binary mode, in which case the encoding argument is ignored, or in text mode, in which case an encoding should be given.
 
-**ENC01X**: checks for :meth:`configparser.ConfigParser.read`.
+
+:bold-title:`ENC01X`: checks for :meth:`configparser.ConfigParser.read`.
 
 .. flake8-codes:: flake8_encodings
 
@@ -27,9 +28,10 @@ Flake8 codes
 	ENC012
 
 .. versionadded:: 0.2.0
-.. versionchanged:: 0.4.0  These codes now require the classes extra to be installed [1]_.
+.. versionchanged:: 0.4.0  These codes now require the ``classes`` extra to be installed [1]_.
 
-**ENC02X**: checks for :meth:`pathlib.Path.open`, :meth:`read_text() <pathlib.Path.read_text>` and :meth:`write_text() <pathlib.Path.write_text>`.
+
+:bold-title:`ENC02X`: checks for :meth:`pathlib.Path.open`, :meth:`read_text() <pathlib.Path.read_text>` and :meth:`write_text() <pathlib.Path.write_text>`.
 
 .. flake8-codes:: flake8_encodings
 
@@ -41,7 +43,7 @@ Flake8 codes
 	ENC026
 
 .. versionadded:: 0.3.0
-.. versionchanged:: 0.4.0  These codes now require the classes extra to be installed [1]_.
+.. versionchanged:: 0.4.0  These codes now require the ``classes`` extra to be installed [1]_.
 
 .. [1] Install using ``python3 -m pip install flake8-encodings[classes]``
 

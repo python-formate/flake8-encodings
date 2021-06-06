@@ -9,7 +9,9 @@ flake8-encodings
 
 .. end short_desc
 
-.. seealso:: :pep:`597` -- Add optional EncodingWarning
+.. only:: html
+
+	.. seealso:: :pep:`597` -- Add optional EncodingWarning
 
 .. start shields
 
@@ -180,6 +182,8 @@ which can be used in conjunction with this tool to identify issues at runtime.
 Contents
 -------------
 
+.. html-section::
+
 .. toctree::
 	:hidden:
 
@@ -212,6 +216,8 @@ Contents
 
 Footnotes
 -------------
+
+.. html-section::
 
 .. [1] "Packages can't be installed when encoding is not UTF-8"
        (https://github.com/methane/pep597-pypi-ascii)
