@@ -64,7 +64,6 @@ extensions = [
     "sphinx_toolbox.tweaks.latex_toc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
-    "sphinxcontrib.httpdomain",
     "sphinxcontrib.extras_require",
     "sphinx.ext.todo",
     "sphinxemoji.sphinxemoji",
@@ -73,6 +72,7 @@ extensions = [
     "sphinxcontrib.default_values",
     "sphinxcontrib.toctree_plus",
     "sphinx_debuginfo",
+    "sphinx_licenseinfo",
     "seed_intersphinx_mapping",
     "sphinx_toolbox.pre_commit",
     "sphinx_toolbox.flake8",
@@ -125,6 +125,13 @@ autodoc_exclude_members = [
     "__abstractmethods__",
     "__hash__",
 ]
+
+[tool.mypy]
+python_version = "3.6"
+namespace_packages = true
+check_untyped_defs = true
+warn_unused_ignores = true
+no_implicit_optional = true
 
 [project.entry-points."flake8.extension"]
 ENC0 = "flake8_encodings:Plugin"
