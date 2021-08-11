@@ -184,6 +184,7 @@ Contents
 
 .. html-section::
 
+
 .. toctree::
 	:hidden:
 
@@ -195,6 +196,7 @@ Contents
 
 	usage
 	Source
+	license
 
 .. sidebar-links::
 	:caption: Links
