@@ -19,9 +19,9 @@ email = "dominic@davis-foster.co.uk"
 file = "LICENSE"
 
 [project.urls]
-Homepage = "https://github.com/domdfcoding/flake8-encodings"
-"Issue Tracker" = "https://github.com/domdfcoding/flake8-encodings/issues"
-"Source Code" = "https://github.com/domdfcoding/flake8-encodings"
+Homepage = "https://github.com/python-formate/flake8-encodings"
+"Issue Tracker" = "https://github.com/python-formate/flake8-encodings/issues"
+"Source Code" = "https://github.com/python-formate/flake8-encodings"
 Documentation = "https://flake8-encodings.readthedocs.io/en/latest"
 
 [project.optional-dependencies]
@@ -47,7 +47,7 @@ conda-channels = [ "conda-forge", "domdfcoding",]
 extras = "all"
 
 [tool.sphinx-pyproject]
-github_username = "domdfcoding"
+github_username = "python-formate"
 github_repository = "flake8-encodings"
 author = "Dominic Davis-Foster"
 project = "flake8-encodings"

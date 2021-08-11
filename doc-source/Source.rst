@@ -3,13 +3,13 @@ Downloading source code
 =========================
 
 The ``flake8-encodings`` source code is available on GitHub,
-and can be accessed from the following URL: https://github.com/domdfcoding/flake8-encodings
+and can be accessed from the following URL: https://github.com/python-formate/flake8-encodings
 
 If you have ``git`` installed, you can clone the repository with the following command:
 
 .. prompt:: bash
 
-	git clone https://github.com/domdfcoding/flake8-encodings
+	git clone https://github.com/python-formate/flake8-encodings
 
 .. parsed-literal::
 
