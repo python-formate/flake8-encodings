@@ -184,6 +184,7 @@ Contents
 
 .. html-section::
 
+
 .. toctree::
 	:hidden:
 
@@ -194,13 +195,15 @@ Contents
 	:glob:
 
 	usage
-	contributing
 	Source
+	license
 
 .. sidebar-links::
 	:caption: Links
 	:github:
 	:pypi: flake8-encodings
+
+	Contributing Guide<https://contributing-to-formate.readthedocs.io>
 
 
 .. start links
@@ -209,7 +212,7 @@ Contents
 
 	View the :ref:`Function Index <genindex>` or browse the `Source Code <_modules/index.html>`__.
 
-	:github:repo:`Browse the GitHub Repository <domdfcoding/flake8-encodings>`
+	:github:repo:`Browse the GitHub Repository <python-formate/flake8-encodings>`
 
 .. end links
 
