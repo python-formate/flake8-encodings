@@ -64,7 +64,8 @@ flake8-encodings
 		:workflow: mypy
 		:alt: mypy status
 
-	.. |requires| requires-io-shield::
+	.. |requires| image:: https://dependency-dash.herokuapp.com/github/python-formate/flake8-encodings/badge.svg
+		:target: https://dependency-dash.herokuapp.com/github/python-formate/flake8-encodings/
 		:alt: Requirements Status
 
 	.. |coveralls| coveralls-shield::
