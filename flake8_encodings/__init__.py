@@ -351,6 +351,7 @@ class Plugin(flake8_helper.Plugin[Visitor]):
 		try:
 			# 3rd party
 			import jedi
+
 			# jedi.settings.fast_parser = False
 
 			original_cache_dir = jedi.settings.cache_directory

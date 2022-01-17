@@ -53,6 +53,7 @@ Examples
 
 .. code-block:: python
 
+	# stdlib
 	import configparser
 
 	open("README.rst").read()  # ENC001 no encoding specified for 'open'.
@@ -61,9 +62,10 @@ Examples
 	open("README.rst", mode="rb", encoding=None).read()  # OK
 
 
-	def foo(mode: str = "r"):
+	def foo(mode: str = 'r'):
 		open("README.rst", mode=mode).read()  # ENC003 no encoding specified for 'open' with unknown mode.
-		open("README.rst", mode=mode, encoding=None).read()  # ENC004 'encoding=None' used for 'open' with unknown mode.
+		open("README.rst", mode=mode,
+				encoding=None).read()  # ENC004 'encoding=None' used for 'open' with unknown mode.
 
 
 	def load_config(filename: str):
@@ -71,12 +73,13 @@ Examples
 		cfg.read(filename)  # ENC011
 		# cfg.read(filename, encoding=None)  # ENC012
 
+
 	def manipulate_file(filename):
 		path = pathlib.Path(filename)
 
 		path.write_text("Hello world")  # ENC025
 
-		with path.open("a") as fp:  # ENC021
+		with path.open('a') as fp:  # ENC021
 			f.write("\nHello everyone")
 
 		print(path.read_text(encoding=None))  # ENC024
