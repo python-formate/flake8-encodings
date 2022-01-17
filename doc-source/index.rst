@@ -111,7 +111,7 @@ flake8-encodings
 		:alt: GitHub top language
 
 	.. |commits-since| github-shield::
-		:commits-since: v0.4.0
+		:commits-since: v0.5.0
 		:alt: GitHub commits since tagged version
 
 	.. |commits-latest| github-shield::
@@ -143,7 +143,7 @@ Installation
 
 .. latex:vspace:: 20px
 
-In version 0.4.0 and above the functionality for checking classes
+In version 0.5.0 and above the functionality for checking classes
 (:class:`~configparser.ConfigParser` and :class:`~.pathlib.Path` for now)
 requires the ``classes`` extra to be installed:
 
