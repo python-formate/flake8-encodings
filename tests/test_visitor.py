@@ -50,7 +50,7 @@ def test_visitor_with_jedi_visit_method(
 
 def test_classvisitor_importerror():
 	if has_jedi:
-		pytest.skip(msg="Requires that jedi isn't installed")
+		pytest.skip(reason="Requires that jedi isn't installed")
 
 	with pytest.raises(
 			ImportError, match="This class requires 'jedi' to be installed but it could not be imported."
