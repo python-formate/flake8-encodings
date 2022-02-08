@@ -101,7 +101,7 @@ flake8-encodings
 .. |language| image:: https://img.shields.io/github/languages/top/python-formate/flake8-encodings
 	:alt: GitHub top language
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/python-formate/flake8-encodings/v0.5.0
+.. |commits-since| image:: https://img.shields.io/github/commits-since/python-formate/flake8-encodings/v0.5.0.post1
 	:target: https://github.com/python-formate/flake8-encodings/pulse
 	:alt: GitHub commits since tagged version
 
@@ -149,7 +149,7 @@ To install with ``conda``:
 .. end installation
 
 
-In version 0.5.0 and above the functionality for checking classes
+In version 0.5.0.post1 and above the functionality for checking classes
 (``configparser.ConfigParser`` and ``pathlib.Path`` for now)
 requires the ``classes`` extra to be installed:
 

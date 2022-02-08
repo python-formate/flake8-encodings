@@ -4,7 +4,7 @@ modname: flake8-encodings
 copyright_years: "2020-2022"
 author: "Dominic Davis-Foster"
 email: "dominic@davis-foster.co.uk"
-version: "0.5.0"
+version: "0.5.0.post1"
 username: "python-formate"
 assignee: "domdfcoding"
 primary_conda_channel: "domdfcoding"
