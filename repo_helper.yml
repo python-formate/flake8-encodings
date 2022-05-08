@@ -42,7 +42,7 @@ classifiers:
 extra_sphinx_extensions:
  - sphinx_toolbox.pre_commit
  - sphinx_toolbox.flake8
- - sphinx_toolbox_experimental.needspace
+ - sphinx-favicon
 
 entry_points:
   flake8.extension:
@@ -55,6 +55,8 @@ keywords:
  - unicode
 
 sphinx_conf_epilogue:
+ - needspace_amount = r"5\baselineskip"
+ - 'favicons = [{"rel": "icon", "href": "https://python-formate.github.io/assets/formate.ico",  "sizes": "48x48", "type": "image/vnd.microsoft.icon"}]'
  - nitpicky = True
 
 extras_require:
