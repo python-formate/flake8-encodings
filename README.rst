@@ -58,8 +58,8 @@ flake8-encodings
 	:target: https://github.com/python-formate/flake8-encodings/actions?query=workflow%3A%22mypy%22
 	:alt: mypy status
 
-.. |requires| image:: https://dependency-dash.herokuapp.com/github/python-formate/flake8-encodings/badge.svg
-	:target: https://dependency-dash.herokuapp.com/github/python-formate/flake8-encodings/
+.. |requires| image:: https://dependency-dash.repo-helper.uk/github/python-formate/flake8-encodings/badge.svg
+	:target: https://dependency-dash.repo-helper.uk/github/python-formate/flake8-encodings/
 	:alt: Requirements Status
 
 .. |coveralls| image:: https://img.shields.io/coveralls/github/python-formate/flake8-encodings/master?logo=coveralls
