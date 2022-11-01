@@ -107,7 +107,7 @@ class Visitor(flake8_helper.Visitor):
 		The functionality for checking classes has moved to the :class:`~.ClassVisitor` subclass.
 	"""
 
-	def check_open_encoding(self, node: ast.Call):
+	def check_open_encoding(self, node: ast.Call) -> None:
 		"""
 		Check the call represented by the given AST node is using encodings correctly.
 
@@ -141,7 +141,7 @@ class Visitor(flake8_helper.Visitor):
 
 	check_encoding = check_open_encoding  # deprecated
 
-	def visit_Call(self, node: ast.Call):  # noqa: D102
+	def visit_Call(self, node: ast.Call) -> None:  # noqa: D102
 
 		if isinstance(node.func, ast.Name):
 
@@ -195,7 +195,7 @@ class ClassVisitor(Visitor):
 		self.filename = PathPlus("<unknown>")
 		self.jedi_script = jedi.Script('')
 
-	def first_visit(self, node: ast.AST, filename: PathPlus):
+	def first_visit(self, node: ast.AST, filename: PathPlus) -> None:
 		"""
 		Like :meth:`ast.NodeVisitor.visit`, but configures type inference.
 
@@ -212,7 +212,7 @@ class ClassVisitor(Visitor):
 		self.jedi_script = jedi.Script(self.filename.read_text(), path=self.filename)
 		self.visit(node)
 
-	def check_configparser_encoding(self, node: ast.Call):
+	def check_configparser_encoding(self, node: ast.Call) -> None:
 		"""
 		Check the call represented by the given AST node is using encodings correctly.
 
@@ -230,7 +230,7 @@ class ClassVisitor(Visitor):
 			if kwargs["encoding"].value is None:
 				self.report_error(node, ENC012)
 
-	def check_pathlib_encoding(self, node: ast.Call, method_name: str):
+	def check_pathlib_encoding(self, node: ast.Call, method_name: str) -> None:
 		"""
 		Check the call represented by the given AST node is using encodings correctly.
 
@@ -279,7 +279,7 @@ class ClassVisitor(Visitor):
 			if kwargs["encoding"].value is None:
 				self.report_error(node, encoding_none)
 
-	def visit_Call(self, node: ast.Call):  # noqa: D102
+	def visit_Call(self, node: ast.Call) -> None:  # noqa: D102
 
 		if isinstance(node.func, ast.Name):
 

@@ -27,7 +27,11 @@ skip_reason = "Output differs depending on jedi availability"
 				pytest.param(False, id="no_jedi", marks=pytest.mark.skipif(has_jedi, reason=skip_reason)),
 				]
 		)
-def test_plugin(tmp_pathplus: PathPlus, advanced_data_regression: AdvancedDataRegressionFixture, has_jedi):
+def test_plugin(
+		tmp_pathplus: PathPlus,
+		advanced_data_regression: AdvancedDataRegressionFixture,
+		has_jedi: bool,
+		):
 	(tmp_pathplus / "code.py").write_text(example_source)
 
 	plugin = Plugin(ast.parse(example_source), filename=str(tmp_pathplus / "code.py"))
