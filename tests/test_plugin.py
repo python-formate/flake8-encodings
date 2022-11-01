@@ -12,7 +12,7 @@ from tests.example_source import example_source
 
 try:
 	# 3rd party
-	import jedi  # type: ignore
+	import jedi  # type: ignore[import]  # noqa: F401
 	has_jedi = True
 except ImportError:
 	has_jedi = False
