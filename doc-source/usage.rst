@@ -93,4 +93,4 @@ See `pre-commit <https://github.com/pre-commit/pre-commit>`_ for instructions
 
 Sample ``.pre-commit-config.yaml``:
 
-.. pre-commit:flake8:: 0.5.0.post1
+.. pre-commit:flake8:: 0.5.1

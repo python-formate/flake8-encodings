@@ -4,7 +4,7 @@ build-backend = "whey"
 
 [project]
 name = "flake8-encodings"
-version = "0.5.0.post1"
+version = "0.5.1"
 description = "A Flake8 plugin to identify incorrect use of encodings."
 readme = "README.rst"
 keywords = [ "encodings", "flake8", "pep597", "unicode",]
