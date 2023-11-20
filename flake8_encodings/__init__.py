@@ -38,6 +38,7 @@ A Flake8 plugin to identify incorrect use of encodings.
 import ast
 import configparser
 import pathlib
+import sys
 import tempfile
 from typing import TYPE_CHECKING, Callable, Iterator, List, Optional, Tuple, Type
 
@@ -92,10 +93,20 @@ def mode_is_binary(mode: ast.AST) -> Optional[bool]:
 
 	if isinstance(mode, ast.Constant):  # pragma: no cover (<py38)
 		return 'b' in mode.value
-	elif isinstance(mode, ast.Str):  # pragma: no cover (py38+)
-		return 'b' in mode.s
 	else:
-		return None
+		if sys.version_info < (3, 12):  # pragma: no cover (py312+)
+			if isinstance(mode, ast.Str):  # pragma: no cover (py38+)
+				return 'b' in mode.s
+
+	return None
+
+
+if sys.version_info < (3, 12):  # pragma: no cover (py312+)
+	_constant_nameconstant = (ast.Constant, ast.NameConstant)
+	_skip_312_deprecations = False
+else:  # pragma: no cover (<py312)
+	_constant_nameconstant = ast.Constant
+	_skip_312_deprecations = True
 
 
 class Visitor(flake8_helper.Visitor):
@@ -135,7 +146,7 @@ class Visitor(flake8_helper.Visitor):
 		if "encoding" not in kwargs:
 			self.report_error(node, ENC003 if unknown_mode else ENC001)
 
-		elif isinstance(kwargs["encoding"], (ast.Constant, ast.NameConstant)):
+		elif isinstance(kwargs["encoding"], _constant_nameconstant):
 			if kwargs["encoding"].value is None:
 				self.report_error(node, ENC004 if unknown_mode else ENC002)
 
@@ -157,11 +168,12 @@ class Visitor(flake8_helper.Visitor):
 					self.check_open_encoding(node)
 					return
 
-			if isinstance(node.func.value, ast.Str):  # pragma: no cover
-				# Attribute on a string
-				return self.generic_visit(node)
+			if not _skip_312_deprecations:  # pragma: no cover (py312+)
+				if isinstance(node.func.value, ast.Str):  # pragma: no cover
+					# Attribute on a string
+					return self.generic_visit(node)
 
-			elif isinstance(node.func.value, ast.BinOp):  # pragma: no cover
+			if isinstance(node.func.value, ast.BinOp):  # pragma: no cover
 				# TODO
 				# Expressions such as (tmp_pathplus / "code.py").write_text(example_source)
 				return self.generic_visit(node)
@@ -226,7 +238,7 @@ class ClassVisitor(Visitor):
 		if "encoding" not in kwargs:
 			self.report_error(node, ENC011)
 
-		elif isinstance(kwargs["encoding"], (ast.Constant, ast.NameConstant)):
+		elif isinstance(kwargs["encoding"], _constant_nameconstant):
 			if kwargs["encoding"].value is None:
 				self.report_error(node, ENC012)
 
@@ -275,7 +287,7 @@ class ClassVisitor(Visitor):
 		if "encoding" not in kwargs:
 			self.report_error(node, no_encoding)
 
-		elif isinstance(kwargs["encoding"], (ast.Constant, ast.NameConstant)):
+		elif isinstance(kwargs["encoding"], _constant_nameconstant):
 			if kwargs["encoding"].value is None:
 				self.report_error(node, encoding_none)
 
@@ -295,11 +307,12 @@ class ClassVisitor(Visitor):
 					self.check_open_encoding(node)
 					return
 
-			if isinstance(node.func.value, ast.Str):  # pragma: no cover
-				# Attribute on a string
-				return self.generic_visit(node)
+			if not _skip_312_deprecations:  # pragma: no cover (py312+)
+				if isinstance(node.func.value, ast.Str):  # pragma: no cover
+					# Attribute on a string
+					return self.generic_visit(node)
 
-			elif isinstance(node.func.value, ast.BinOp):  # pragma: no cover
+			if isinstance(node.func.value, ast.BinOp):  # pragma: no cover
 				# TODO
 				# Expressions such as (tmp_pathplus / "code.py").write_text(example_source)
 				return self.generic_visit(node)
