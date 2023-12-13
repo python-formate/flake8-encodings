@@ -13,7 +13,7 @@ short_desc: "A Flake8 plugin to identify incorrect use of encodings."
 
 min_coverage: 94
 use_whey: true
-python_deploy_version: 3.6
+python_deploy_version: 3.8
 docs_fail_on_warning: true
 tox_testenv_extras: classes
 sphinx_html_theme: furo
