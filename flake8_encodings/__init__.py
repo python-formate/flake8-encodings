@@ -186,7 +186,7 @@ class Visitor(flake8_helper.Visitor):
 		self.generic_visit(node)
 
 
-class ClassVisitor(Visitor):
+class ClassVisitor(Visitor):  # pragma: no cover (py313+)
 	"""
 	AST visitor to identify incorrect use of encodings,
 	with support for :class:`pathlib.Path` and :class:`configparser.ConfigParser`.
@@ -361,7 +361,7 @@ class Plugin(flake8_helper.Plugin[Visitor]):
 
 	def run(self) -> Iterator[Tuple[int, int, str, Type["Plugin"]]]:  # noqa: D102
 
-		try:
+		try:  # pragma: no cover (py313+)
 			# 3rd party
 			import jedi
 
@@ -388,7 +388,7 @@ class Plugin(flake8_helper.Plugin[Visitor]):
 				yield line, col, msg, type(self)
 
 
-def is_configparser_read(class_name: str, method_name: str) -> bool:
+def is_configparser_read(class_name: str, method_name: str) -> bool:  # pragma: no cover (py313+)
 	"""
 	Returns :py:obj:`True` if method is :meth:`configparser.ConfigParser.read` or
 	:meth:`configparser.RawConfigParser.read`.
@@ -408,7 +408,7 @@ def is_configparser_read(class_name: str, method_name: str) -> bool:
 	return True
 
 
-def is_pathlib_method(class_name: str, method_name: str) -> bool:
+def is_pathlib_method(class_name: str, method_name: str) -> bool:  # pragma: no cover (py313+)
 	"""
 	Returns :py:obj:`True` if method is :meth:`pathlib.Path.open`,
 	:meth:`read_text() <pathlib.Path.read_text>` or :meth:`write_text() <pathlib.Path.write_text>`.
@@ -428,7 +428,7 @@ def is_pathlib_method(class_name: str, method_name: str) -> bool:
 	return True
 
 
-def get_inferred_types(jedi_script: "Script", node: ast.Call) -> List[str]:
+def get_inferred_types(jedi_script: "Script", node: ast.Call) -> List[str]:  # pragma: no cover (py313+)
 	"""
 	Returns a list of types inferred by ``jedi`` for the given call node.
 

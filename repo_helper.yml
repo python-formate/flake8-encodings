@@ -68,6 +68,7 @@ extras_require:
 
 tox_unmanaged:
  - testenv
+ - testenv:py313-dev
 
 exclude_files:
  - contributing
