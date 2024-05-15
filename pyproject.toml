@@ -10,12 +10,12 @@ readme = "README.rst"
 keywords = [ "encodings", "flake8", "pep597", "unicode",]
 dynamic = [ "requires-python", "classifiers", "dependencies",]
 
+[project.license]
+file = "LICENSE"
+
 [[project.authors]]
 name = "Dominic Davis-Foster"
 email = "dominic@davis-foster.co.uk"
-
-[project.license]
-file = "LICENSE"
 
 [project.urls]
 Homepage = "https://github.com/python-formate/flake8-encodings"
@@ -23,12 +23,12 @@ Homepage = "https://github.com/python-formate/flake8-encodings"
 "Source Code" = "https://github.com/python-formate/flake8-encodings"
 Documentation = "https://flake8-encodings.readthedocs.io/en/latest"
 
+[project.entry-points."flake8.extension"]
+ENC0 = "flake8_encodings:Plugin"
+
 [project.optional-dependencies]
 classes = [ "jedi>=0.18.0",]
 all = [ "jedi>=0.18.0",]
-
-[project.entry-points."flake8.extension"]
-ENC0 = "flake8_encodings:Plugin"
 
 [tool.whey]
 base-classifiers = [
