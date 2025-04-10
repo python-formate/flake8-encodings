@@ -23,16 +23,17 @@ conda_channels:
 
 # Versions to run tests for
 python_versions:
- - '3.7'
- - '3.8'
- - '3.9'
- - "3.10"
- - "3.11"
- - "3.12"
- - "3.13"
- - pypy37
- - pypy38
- - pypy39
+ 3.7:
+ 3.8:
+ 3.9:
+ "3.10":
+ 3.11:
+ 3.12:
+ 3.13:
+  experimental: true
+ pypy37:
+ pypy38:
+ pypy39:
 
 classifiers:
  - 'Development Status :: 4 - Beta'
@@ -66,7 +67,7 @@ extras_require:
 
 tox_unmanaged:
  - testenv
- - testenv:py313-dev
+ - testenv:py313
 
 exclude_files:
  - contributing
