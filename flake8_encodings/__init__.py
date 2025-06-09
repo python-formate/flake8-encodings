@@ -50,8 +50,8 @@ from domdf_python_tools.typing import PathLike
 
 if TYPE_CHECKING:
 	# 3rd party
-	from jedi import Script
-	from jedi.api.classes import Name  # type: ignore[import]
+	from jedi import Script  # type: ignore[import-untyped]
+	from jedi.api.classes import Name  # type: ignore[import-untyped]
 
 __author__: str = "Dominic Davis-Foster"
 __copyright__: str = "2020-2021 Dominic Davis-Foster"
@@ -197,7 +197,7 @@ class ClassVisitor(Visitor):  # pragma: no cover (py313+)
 	def __init__(self):
 		try:
 			# 3rd party
-			import jedi  # type: ignore[import]
+			import jedi
 		except ImportError as e:
 			exc = e.__class__("This class requires 'jedi' to be installed but it could not be imported.")
 			exc.__traceback__ = e.__traceback__
