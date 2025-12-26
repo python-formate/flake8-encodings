@@ -125,6 +125,8 @@ class Visitor(flake8_helper.Visitor):
 		This function checks :func:`open`, :func:`builtins.open <open>` and :func:`io.open`.
 
 		.. versionchanged:: 0.2.0  Renamed from ``check_encoding``
+
+		:param node:
 		"""
 
 		kwargs = kwargs_from_node(node, open)
@@ -231,6 +233,8 @@ class ClassVisitor(Visitor):  # pragma: no cover (py313+)
 		This function checks :meth:`configparser.ConfigParser.read`.
 
 		.. versionadded:: 0.2.0
+
+		:param node:
 		"""
 
 		kwargs = kwargs_from_node(node, _configparser_read)
@@ -250,6 +254,9 @@ class ClassVisitor(Visitor):  # pragma: no cover (py313+)
 		and :meth:`pathlib.Path.write_text`.
 
 		.. versionadded:: 0.3.0
+
+		:param node:
+		:param method_name:
 		"""
 
 		function: Callable
@@ -349,6 +356,7 @@ class Plugin(flake8_helper.Plugin[Visitor]):
 	A Flake8 plugin to identify incorrect use of encodings.
 
 	:param tree: The abstract syntax tree (AST) to check.
+	:param filename:
 	"""
 
 	name: str = __name__

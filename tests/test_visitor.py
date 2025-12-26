@@ -36,7 +36,8 @@ def test_visitor_with_jedi(tmp_pathplus: PathPlus, advanced_data_regression: Adv
 
 
 def test_visitor_with_jedi_visit_method(
-		tmp_pathplus: PathPlus, advanced_data_regression: AdvancedDataRegressionFixture
+		tmp_pathplus: PathPlus,
+		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 	pytest.importorskip("jedi")
 
