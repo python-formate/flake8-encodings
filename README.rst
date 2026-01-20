@@ -109,11 +109,11 @@ flake8-encodings
 	:target: https://github.com/python-formate/flake8-encodings/commit/master
 	:alt: GitHub last commit
 
-.. |maintained| image:: https://img.shields.io/maintenance/yes/2025
+.. |maintained| image:: https://img.shields.io/maintenance/yes/2026
 	:alt: Maintenance
 
 .. |pypi-downloads| image:: https://img.shields.io/pypi/dm/flake8-encodings
-	:target: https://pypi.org/project/flake8-encodings/
+	:target: https://pypistats.org/packages/flake8-encodings
 	:alt: PyPI - Downloads
 
 .. end shields
